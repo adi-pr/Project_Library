@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="style.css" />
+    <script defer src="./app.js"></script>
+    <title>Document</title>
+  </head>
+  <body>
+
+    <header>
+      <h1>Library</h1>
+      <button class="log-in">Log In</button>
+    </header>
+    <div class="add-book">
+      <button id="add-book-btn" onclick="addBookToLibrary()">+ Add Book</button>
+    </div>
+    <div class="card-container"></div>
+
+    <div id="form-container" style="display: none;">
+        <form id="addBookForm">
+            <p class="form-header">Add a New Book</p>
+      
+            <input type="text" id="title" name="title" placeholder="Title" required/>
+            <input type="text" id="author" name="author" placeholder="Author" required/>
+            <input type="number" min="0" id="pages" name="pages" placeholder="Pages" required/>
+            <label>
+              <p>Have you read it?</p>
+              <input type="checkbox" name="isRead" id="isRead" />
+            </label>
+            <button type="submit">Submit</button>
+          </form>
+    </div>
+    <footer>
+      <p>&copy; 2023 Aditya (Ruben) Prasad</p>
+      <a href="https://github.com/yourusername" target="_blank">
+        <i class="fab fa-github"></i>
+      </a>
+    </footer>
+    
+  </body>
+</html>
