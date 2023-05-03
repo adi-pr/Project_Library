@@ -1,8 +1,3 @@
-let myLibrary = []
-const cardContainer = document.querySelector(".card-container")
-const bookForm = document.getElementById('form-container')
-const form = document.getElementById('addBookForm')
-
 function Book(title, author, pages, isRead) {
     this.title = title
     this.author = author
@@ -10,13 +5,34 @@ function Book(title, author, pages, isRead) {
     this.isRead = isRead
 }
 
-function addBookToLibrary() {
-    bookForm.style.display = 'block';
+Book.prototype.toggleReadStatus = function() {
+    this.isRead = !this.isRead;
 }
 
-function displayBooks(myLibrary) {
-    cardContainer.innerHTML = ""
-    myLibrary.forEach((book) => {
+Book.prototype.getReadButtonText = function() {
+    return this.isRead ? "Book has been read" : "Book has not been read";
+}
+
+function Library() {
+    this.books = [];
+}
+
+Library.prototype.addBook = function(book) {
+    this.books.push(book);
+}
+
+Library.prototype.removeBook = function(book) {
+    const index = this.books.indexOf(book);
+    if (index !== -1) {
+        this.books.splice(index, 1);
+    }
+}
+
+Library.prototype.displayBooks = function() {
+    const cardContainer = document.querySelector(".card-container");
+    cardContainer.innerHTML = "";
+
+    this.books.forEach((book) => {
         const card = document.createElement('div')
         card.classList.add('card')
 
@@ -31,19 +47,12 @@ function displayBooks(myLibrary) {
 
         const isReadButton = document.createElement('button')
         isReadButton.classList.add('is-read-button')
-
-        if (book.isRead === true) {
-            isReadButton.innerText = "Book has been read"
-        } else {
-            isReadButton.innerText = "Book has not been read"
-        }
+        isReadButton.innerText = book.getReadButtonText();
 
         isReadButton.addEventListener("click", () => {
-            book.isRead = !book.isRead
-            isReadButton.innerText = book.isRead ? "Book has been read" : "Book has not been read";
+            book.toggleReadStatus();
+            isReadButton.innerText = book.getReadButtonText();
         })
-
-
 
         const removeButton = document.createElement('button');
         removeButton.classList.add('remove-button')
@@ -51,12 +60,8 @@ function displayBooks(myLibrary) {
 
         removeButton.addEventListener("click", () => {
             cardContainer.removeChild(card);
-            
-            const index = myLibrary.indexOf(book);
-            if (index !== -1) {
-              myLibrary.splice(index, 1);
-            }
-          });
+            this.removeBook(book);
+        });
 
         card.appendChild(bookTitle)
         card.appendChild(bookAuthor)
@@ -67,6 +72,15 @@ function displayBooks(myLibrary) {
     })
 }
 
+const library = new Library();
+
+function addBookToLibrary() {
+    bookForm.style.display = 'block';
+}
+
+const bookForm = document.getElementById('form-container')
+const form = document.getElementById('addBookForm')
+
 bookForm, addEventListener("submit", function (event) {
     event.preventDefault()
 
@@ -76,8 +90,8 @@ bookForm, addEventListener("submit", function (event) {
     const isReadInput = document.getElementById('isRead').checked
 
     const book = new Book(titleInput, authorInput, pagesInput, isReadInput)
-    myLibrary.push(book)
-    displayBooks(myLibrary)
+    library.addBook(book);
+    library.displayBooks();
     bookForm.style.display = 'none';
 })
 
@@ -87,4 +101,4 @@ bookForm.addEventListener('click', () => {
 
 form.addEventListener('click', (event) => {
     event.stopPropagation();
-  });
+});
